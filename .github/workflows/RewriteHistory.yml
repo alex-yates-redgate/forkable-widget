@@ -1,9 +1,7 @@
 name: Rewrite History
 
 on:
-  push:
-    tags:
-      - 'baseline'
+  workflow_dispatch:
 
 jobs:
   delete_history:
