@@ -11,8 +11,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Set up rgclone.exe
+      - name: Create Data Container
+        id: createDc
         run: |
+          # Setting up rgclone.exe
           export RGCLONE_API_ENDPOINT=${{ secrets.RGCLONE_API_ENDPOINT }}
           export RGCLONE_ACCESS_TOKEN=${{ secrets.RGCLONE_ACCESS_TOKEN }}
           RGCLONE_DOWNLOAD_URL="$RGCLONE_API_ENDPOINT"
@@ -20,25 +22,14 @@ jobs:
           echo "Downloading and unzipping rgclone from $RGCLONE_DOWNLOAD_URL"
           curl $RGCLONE_DOWNLOAD_URL | tar xz
           
-          rm -r ~/redgate -f # removes redgate dir (if exists)
-          mkdir ~/redgate -p # cretes a redgate dir (if not exists)
-          mv ./rgclone ~/redgate/rgclone -f # copies rgclone to persistent dir, and overwrites existing file
-          
-          echo "rgclone version is:"
-          ~/redgate/rgclone version
-
-      - name: Create Data Container
-        id: createDc
-        run: |
-          export RGCLONE_API_ENDPOINT=${{ secrets.RGCLONE_API_ENDPOINT }}
-          export RGCLONE_ACCESS_TOKEN=${{ secrets.RGCLONE_ACCESS_TOKEN }}
+          # Creating data container
           echo "Creating data container"
           BUILD_NUMBER="${{ github.run_number }}-${{ github.sha }}"
-          output=$(~/redgate/rgclone create data-container --image Widget --name "widget-dry-run-$BUILD_NUMBER" --lifetime 15m --output yaml)
+          output=$(./redgate/rgclone create data-container --image Widget --name "widget-dry-run-$BUILD_NUMBER" --lifetime 15m --output yaml)
+          
+          # Outputting JDBC for flyway
           dcJdbc=$(echo "$output" | grep -o 'jdbcconnectionstring: .*' | cut -d ' ' -f 2-)
-          echo "Data container is available at: $dcJdbc"
           dbJdbc="${dcJdbc}databaseName=WidgetProduction"
-          echo "Target database is available at: $dbJdbc"
           echo "::set-output name=jdbc::$dbJdbc"
 
       - name: Set up JDK
@@ -47,7 +38,7 @@ jobs:
           distribution: 'adopt'
           java-version: '11'
       
-      - name: Set up and run Flyway
+      - name: Flyway Migrate
         run: |
           wget -qO- https://repo1.maven.org/maven2/org/flywaydb/flyway-commandline/8.5.13/flyway-commandline-8.5.13-linux-x64.tar.gz | tar xvz
           export PATH="$PWD/flyway-8.5.13:$PATH"
