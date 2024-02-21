@@ -4,7 +4,7 @@ on:
     workflow_dispatch:
 
 jobs:
-  reset_basline_tag:
+  dry_run_deploy:
     runs-on: ubuntu-latest
 
     steps:
