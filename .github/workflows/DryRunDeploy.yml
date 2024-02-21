@@ -39,7 +39,7 @@ jobs:
           export RGCLONE_ACCESS_TOKEN=${{ secrets.RGCLONE_ACCESS_TOKEN }}
           echo "Creating data container"
           BUILD_NUMBER="${{ github.run_number }}-${{ github.sha }}"
-          output=$(~/redgate/rgclone create data-container --image Widget --name "widget-dry-run-$BUILD_NUMBER" --lifetime 15m)
+          output=$(~/redgate/rgclone create data-container --image Widget --name "widget-dry-run-$BUILD_NUMBER" --lifetime 15m --output yaml)
           dcJdbc=$(echo "$output" | grep -o 'jdbcconnectionstring: .*' | cut -d ' ' -f 2-)
           echo "Data container is available at: $dcJdbc"
           dbJdbc="$jdbc;databaseName=WidgetProduction"
