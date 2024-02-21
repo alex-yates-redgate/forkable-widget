@@ -4,7 +4,7 @@ on:
     workflow_dispatch:
 
 jobs:
-  delete_history:
+  reset_basline_tag:
     runs-on: ubuntu-latest
 
     steps:
