@@ -37,7 +37,7 @@ jobs:
         run: |
           echo "Creating data container"
           BUILD_NUMBER="${{ github.run_number }}-${{ github.sha }}"
-          output = $(~/redgate/rgclone create data-container --name "widget-dry-run-$BUILD_NUMBER" --lifetime 15m)
+          output = $(~/redgate/rgclone create data-container -image Widget --name "widget-dry-run-$BUILD_NUMBER" --lifetime 15m)
           dcJdbc=$(echo "$output" | awk '/jdbcconnectionstring:/ {print $2}')
           echo "Data container is available at: $dcJdbc"
           dbJdbc=$jdbc + ";databaseName=WidgetProduction"
