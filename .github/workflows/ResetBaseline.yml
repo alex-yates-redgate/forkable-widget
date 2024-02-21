@@ -1,0 +1,22 @@
+name: Reset Baseline
+
+on:
+    workflow_dispatch:
+
+jobs:
+  delete_history:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GH_PAT_TOKEN }}
+
+      - name: Delete existing baseline tag and add a new one
+        run: |
+          git tag -d baseline    
+          git push origin :refs/tags/baseline    
+          git tag baseline    
+          git push origin baseline
