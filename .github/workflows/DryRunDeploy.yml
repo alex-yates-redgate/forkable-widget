@@ -49,8 +49,8 @@ jobs:
       
       - name: Set up and run Flyway
         run: |
-          wget -qO- https://repo1.maven.org/maven2/org/flywaydb/flyway-commandline/8.5.2/flyway-commandline-8.5.2-linux-x64.tar.gz | tar xvz
-          export PATH="$PWD/flyway-8.5.2:$PATH"
+          wget -qO- https://repo1.maven.org/maven2/org/flywaydb/flyway-commandline/8.5.13/flyway-commandline-8.5.13-linux-x64.tar.gz | tar xvz
+          export PATH="$PWD/flyway-8.5.13:$PATH"
           echo "Running flyway migrate to target ${{ steps.createDc.outputs.jdbc }}"
           flyway migrate -url="${{ steps.createDc.outputs.jdbc }}" -locations="filesystem:./migrations"
       
