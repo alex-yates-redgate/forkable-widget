@@ -53,6 +53,6 @@ jobs:
           export PATH="$PWD/flyway-8.5.2:$PATH"
           echo "Current working directory: $(pwd)"
           echo "Directory structure:"
-          ls -R
-          flyway -url=${{ steps.createDc.outputs.jdbc }} -locations="filesystem:${{ github.workspace }}/migrations" migrate
+          ls
+          flyway -url=${{ steps.createDc.outputs.jdbc }} -locations="filesystem:./migrations" migrate
       
