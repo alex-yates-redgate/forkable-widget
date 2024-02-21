@@ -22,4 +22,5 @@ jobs:
 
           # Delete all history back to the baseline tag
           git reset --hard $BASELINE_SHA
-          git push origin HEAD --force
+          git push https://${{ secrets.PAT_TOKEN }}@github.com/${{ github.repository }}.git HEAD --force
+
