@@ -42,7 +42,7 @@ jobs:
           output=$(~/redgate/rgclone create data-container --image Widget --name "widget-dry-run-$BUILD_NUMBER" --lifetime 15m --output yaml)
           dcJdbc=$(echo "$output" | grep -o 'jdbcconnectionstring: .*' | cut -d ' ' -f 2-)
           echo "Data container is available at: $dcJdbc"
-          dbJdbc="$dcJdbc;databaseName=WidgetProduction"
+          dbJdbc="${dcJdbc}databaseName=WidgetProduction"
           echo "Target database is available at: $dbJdbc"
           echo "::set-output name=jdbc::$dbJdbc"
 
