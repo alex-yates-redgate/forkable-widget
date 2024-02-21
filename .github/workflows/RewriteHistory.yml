@@ -13,11 +13,10 @@ jobs:
 
       - name: Delete history back to baseline tag
         run: |
-          # Get the baseline tag
-          BASELINE_TAG=$(git describe --tags --abbrev=0)
-
           # Get the SHA of the baseline tag
-          BASELINE_SHA=$(git rev-list -n 1 $BASELINE_TAG)
+          BASELINE_SHA=$(git rev-list -n 1 baseline)
+
+          echo "Rewinding history to baseline SHA: $BASELINE_SHA"
 
           # Delete all history back to the baseline tag
           git reset --hard $BASELINE_SHA
