@@ -9,9 +9,10 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           fetch-depth: 0
+          token: ${{ secrets.GH_PAT_TOKEN }}
 
       - name: Delete history back to baseline tag
         run: |
@@ -22,5 +23,5 @@ jobs:
 
           # Delete all history back to the baseline tag
           git reset --hard $BASELINE_SHA
-          git push https://${{ secrets.GH_PAT_TOKEN }}@github.com/${{ github.repository }}.git HEAD --force
+          git push origin HEAD --force
 
