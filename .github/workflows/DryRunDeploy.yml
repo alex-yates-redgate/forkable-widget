@@ -56,5 +56,5 @@ jobs:
         run: |
           wget -qO- https://repo1.maven.org/maven2/org/flywaydb/flyway-commandline/8.5.2/flyway-commandline-8.5.2-linux-x64.tar.gz | tar xvz
           export PATH="$PWD/flyway-8.5.2:$PATH"
-          flyway -url=${{ steps.createDc.outputs.jdbc }} migrate
+          flyway -url=${{ steps.createDc.outputs.jdbc }} -locations="filesystem:${{ github.workspace }}/migrations" migrate
       
