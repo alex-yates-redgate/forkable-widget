@@ -1,0 +1,26 @@
+name: Rewrite History
+
+on:
+  push:
+    tags:
+      - 'baseline'
+
+jobs:
+  delete_history:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Delete history back to baseline tag
+        run: |
+          # Get the baseline tag
+          BASELINE_TAG=$(git describe --tags --abbrev=0)
+
+          # Get the SHA of the baseline tag
+          BASELINE_SHA=$(git rev-list -n 1 $BASELINE_TAG)
+
+          # Delete all history back to the baseline tag
+          git reset --hard $BASELINE_SHA
+          git push origin HEAD --force
