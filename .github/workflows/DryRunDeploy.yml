@@ -54,5 +54,5 @@ jobs:
           echo "Current working directory: $(pwd)"
           echo "Directory structure:"
           ls
-          flyway -url=${{ steps.createDc.outputs.jdbc }} -locations="filesystem:./migrations" migrate
+          flyway migrate -url=${{ steps.createDc.outputs.jdbc }} -locations="filesystem:./migrations"
       
