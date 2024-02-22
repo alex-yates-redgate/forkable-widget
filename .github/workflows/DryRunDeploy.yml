@@ -38,7 +38,8 @@ jobs:
           curl -sS https://download.red-gate.com/maven/release/com/redgate/flyway/flyway-commandline/10.8.1/flyway-commandline-10.8.1-linux-x64.tar.gz | tar xz >/dev/null
           export PATH="$PWD/flyway-10.8.1:$PATH"
           # Reading JDBC connection string from environment file
-          jdbc=$(cat $GITHUB_ENV | grep -o 'jdbc=.*' | cut -d '=' -f 2-)
+          jdbc=$(grep -o 'jdbc=.*' "$GITHUB_ENV" | cut -d '=' -f 2-)
           echo "Running flyway migrate to target $jdbc"
           flyway migrate -url="$jdbc" -locations="filesystem:./migrations"
+        
         
