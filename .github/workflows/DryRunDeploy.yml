@@ -13,12 +13,12 @@ jobs:
 
       - name: Create Data Container
         id: createDc
+        env:
+          RGCLONE_API_ENDPOINT: ${{ secrets.RGCLONE_API_ENDPOINT }}
+          RGCLONE_ACCESS_TOKEN: ${{ secrets.RGCLONE_ACCESS_TOKEN }}
         run: |
           # Setting up rgclone.exe
-          export RGCLONE_API_ENDPOINT=${{ secrets.RGCLONE_API_ENDPOINT }}
-          export RGCLONE_ACCESS_TOKEN=${{ secrets.RGCLONE_ACCESS_TOKEN }}
-          RGCLONE_DOWNLOAD_URL="$RGCLONE_API_ENDPOINT"
-          RGCLONE_DOWNLOAD_URL+="cloning-api/download/cli/linux-amd64"
+          RGCLONE_DOWNLOAD_URL="$RGCLONE_API_ENDPOINT/cloning-api/download/cli/linux-amd64"
           echo "Downloading and unzipping rgclone from $RGCLONE_DOWNLOAD_URL"
           curl -sS "$RGCLONE_DOWNLOAD_URL" | tar xz
           
@@ -39,6 +39,3 @@ jobs:
           export PATH="$PWD/flyway-10.8.1:$PATH"
           echo "Running flyway migrate to target $jdbc"
           flyway migrate -url="$jdbc" -locations="filesystem:./migrations"
-        
-        
-        
