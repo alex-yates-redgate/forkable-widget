@@ -30,7 +30,7 @@ jobs:
           # Outputting JDBC for flyway
           dcJdbc=$(echo "$output" | grep -o 'jdbcconnectionstring: .*' | cut -d ' ' -f 2-)
           dbJdbc="${dcJdbc}databaseName=WidgetProduction"
-          echo "::set-output name=jdbc::$dbJdbc"
+          echo "jdbc=$dbJdbc" >> $GITHUB_ENV
       
       - name: Flyway Migrate
         run: |
