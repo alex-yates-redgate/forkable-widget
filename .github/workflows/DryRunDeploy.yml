@@ -32,11 +32,11 @@ jobs:
           dbJdbc="${dcJdbc}databaseName=WidgetProduction"
           echo "::set-output name=jdbc::$dbJdbc"
 
-      - name: Set up JDK
-        uses: actions/setup-java@v2
-        with:
-          distribution: 'adopt'
-          java-version: '11'
+      #- name: Set up JDK
+      #  uses: actions/setup-java@v2
+      #  with:
+      #    distribution: 'adopt'
+      #    java-version: '11'
       
       - name: Flyway Migrate
         run: |
