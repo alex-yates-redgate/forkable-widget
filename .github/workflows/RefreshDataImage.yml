@@ -51,17 +51,17 @@ jobs:
           cat ./tdm/Widget.yml
 
           echo "Creating new Widget data image"
-          ~/redgate/rgclone create di -f ./tdm/Widget.yml --name "${IMAGE_NAME}_New"
+          ./rgclone create di -f ./tdm/Widget.yml --name "${IMAGE_NAME}_New"
           
           echo "Renaming current Widget data image to 'Widget_Previous'"
-          ~/redgate/rgclone update di $IMAGE_NAME --name "${IMAGE_NAME}_Previous"
+          ./rgclone update di $IMAGE_NAME --name "${IMAGE_NAME}_Previous"
           
           echo "Renaming new Widget data image to 'Widget'"
-          ~/redgate/rgclone update di "${IMAGE_NAME}_New" --name $IMAGE_NAME
+          ./rgclone update di "${IMAGE_NAME}_New" --name $IMAGE_NAME
 
           echo "Updating the lifetime of the old image to 2 hours"
-          ~/redgate/rgclone update di "${IMAGE_NAME}_Previous_${RUN_NUM}" --lifetime 2h
+          ./rgclone update di "${IMAGE_NAME}_Previous_${RUN_NUM}" --lifetime 2h
 
           echo "Sharing the new image with designated user(s)"
-          ~/redgate/rgclone update di $IMAGE_NAME --user RG_ACCOUNT
+          ./rgclone update di $IMAGE_NAME --user RG_ACCOUNT
       

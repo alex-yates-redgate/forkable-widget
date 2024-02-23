@@ -1,0 +1,69 @@
+sourceType: Backup
+name: Widget
+engine: mssql
+version: 2022
+tags:
+- repo_alex_yates_redgate_forkable_widget_
+- githash_5d388646
+- branch_main_
+- gitrun_18
+backups:
+  - path: mssql/Widget/WidgetProduction.bak
+preScript: |
+  CREATE DATABASE [Widget_Shadow]
+postScript: |
+  create login [Redgate]
+  with password = N'[Redg@te1]'
+    , default_database = [master]
+    , default_language = [us_english]
+    , check_expiration = off
+    , check_policy = off;
+  go
+
+  alter server role [sysadmin] add member [Redgate];
+  go
+
+  use WidgetProduction
+  create user [Redgate] for login [Redgate]
+  go
+
+  use Widget_Shadow
+  create user [Redgate] for login [Redgate]
+  go
+
+  use WidgetProduction
+  SET ANSI_NULLS ON
+  GO
+  SET QUOTED_IDENTIFIER ON
+  GO
+  CREATE TABLE [dbo].[flyway_schema_history](
+  	[installed_rank] [int] NOT NULL,
+  	[version] [nvarchar](50) NULL,
+  	[description] [nvarchar](200) NULL,
+  	[type] [nvarchar](20) NOT NULL,
+  	[script] [nvarchar](1000) NOT NULL,
+  	[checksum] [int] NULL,
+  	[installed_by] [nvarchar](100) NOT NULL,
+  	[installed_on] [datetime] NOT NULL,
+  	[execution_time] [int] NOT NULL,
+  	[success] [bit] NOT NULL
+  ) ON [PRIMARY]
+  GO
+  ALTER TABLE [dbo].[flyway_schema_history] ADD  CONSTRAINT [flyway_schema_history_pk] PRIMARY KEY CLUSTERED 
+  (
+  	[installed_rank] ASC
+  )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+  GO
+  CREATE NONCLUSTERED INDEX [flyway_schema_history_s_idx] ON [dbo].[flyway_schema_history]
+  (
+  	[success] ASC
+  )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+  GO
+  ALTER TABLE [dbo].[flyway_schema_history] ADD  DEFAULT (getdate()) FOR [installed_on]
+  GO
+  
+  INSERT INTO [WidgetProduction].[dbo].[flyway_schema_history] 
+  ([installed_rank], [version], [description], [type], [script], [checksum], [installed_by], [installed_on], [execution_time], [success])
+  VALUES 
+  (1, '002.20230703112421', '<< Flyway Baseline >>', 'BASELINE', '<< Flyway Baseline >>', NULL, 'sa', '2024-02-19 14:53:52.867', 0, 1);
+  GO
