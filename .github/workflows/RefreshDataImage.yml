@@ -20,10 +20,10 @@ jobs:
           DBPASSWORD: ${{ secrets.RGCLONE_DBPASSWORD }}
         run: |
           # Clean up 
-          REPO_TAG=$(echo "${REPO:0:-1}" | tr -c -s '[:alnum:][:blank:]' '_')     # Replaces all non alphanumerics with "_" and removes trailing "_"
-          HASH_TAG="$(echo "${HASH:0:8}")"                                        # The first 8 chars should be plenty
-          BRANCH_TAG=$(echo "${BRANCH:0:-1}" | tr -c -s '[:alnum:][:blank:]' '_') # Replaces all non alphanumerics with "_" and removes trailing "_"
-          RUN_NUM_TAG=$RUN_NUM                                                    # No cleanup required, but being consistent with var names anyway
+          REPO_TAG=$(echo "${REPO}" | tr -c -s '[:alnum:][:blank:]' '_' | head -c -1)     # Replaces all non alphanumerics with "_" and removes trailing "_"
+          HASH_TAG="$(echo "${HASH:0:8}")"                                                # The first 8 chars should be plenty
+          BRANCH_TAG=$(echo "${BRANCH}" | tr -c -s '[:alnum:][:blank:]' '_' | head -c -1) # Replaces all non alphanumerics with "_" and removes trailing "_"
+          RUN_NUM_TAG=$RUN_NUM                                                            # No cleanup required, but being consistent with var names anyway
 
           # Update the Widget.yml file with the correct tags
           sed -i "s/\[REPO\]/$REPO_TAG/g;" tdm/Widget.yml
