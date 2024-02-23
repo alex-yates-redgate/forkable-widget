@@ -50,13 +50,13 @@ jobs:
           ./rgclone create di -f ./tdm/Widget.yml --name "${IMAGE_NAME}_New"
           
           echo "Renaming $IMAGE_NAME data image to ${IMAGE_NAME}_Previous"
-          ./rgclone update di $IMAGE_NAME --name "${IMAGE_NAME}_Previous" 2>/dev/null # '2>/dev/null' redirects output to avoid broken builds if ${IMAGE_NAME} does not exist
+          ./rgclone update di $IMAGE_NAME --name "${IMAGE_NAME}_Previous" 2>/dev/null || true # '2>/dev/null || true' redirects output to avoid broken builds if ${IMAGE_NAME} does not exist
           
           echo "Renaming ${IMAGE_NAME}_New data image to $IMAGE_NAME"
           ./rgclone update di "${IMAGE_NAME}_New" --name $IMAGE_NAME
 
           echo "Updating ${IMAGE_NAME}_Previous lifetime to 2 hours"
-          ./rgclone update di "${IMAGE_NAME}_Previous" --lifetime 2h 2>/dev/null      # '2>/dev/null' redirects output to avoid broken builds if ${IMAGE_NAME} does not exist
+          ./rgclone update di "${IMAGE_NAME}_Previous" --lifetime 2h 2>/dev/null || true      # '2>/dev/null || true' redirects output to avoid broken builds if ${IMAGE_NAME} does not exist
           
           echo "Sharing $IMAGE_NAME with designated user(s)"
           ./rgclone update di $IMAGE_NAME --user $RG_ACCOUNT
