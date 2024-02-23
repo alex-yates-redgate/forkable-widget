@@ -47,9 +47,6 @@ jobs:
           RGCLONE_DOWNLOAD_URL="${RGCLONE_API_ENDPOINT}cloning-api/download/cli/linux-amd64"
           curl -sS "$RGCLONE_DOWNLOAD_URL" | tar xz
 
-          echo "Reading ./tdm/Widget.yml"
-          cat ./tdm/Widget.yml
-
           echo "Creating new Widget data image"
           ./rgclone create di -f ./tdm/Widget.yml --name "${IMAGE_NAME}_New"
           
