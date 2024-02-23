@@ -21,7 +21,7 @@ jobs:
         run: |
           # Clean up 
           REPO_TAG=$(echo "$REPO" | tr -c -s '[:alnum:][:blank:]' '_')      # We can only use alphanumeric characters and underscores in tags
-          HASH_TAG="$(echo "${HASH:0:8}")                                   # The first 8 chars should be plenty
+          HASH_TAG="$(echo "${HASH:0:8}")"                                  # The first 8 chars should be plenty
           BRANCH_TAG=$(echo "$BRANCH" | tr -c -s '[:alnum:][:blank:]' '_')  # We can only use alphanumeric characters and underscores in tags
           RUN_NUM_TAG=$RUN_NUM                                              # This should just be a number
           
