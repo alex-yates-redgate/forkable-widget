@@ -1,0 +1,64 @@
+name: Refresh Data Image
+
+on:
+  workflow_dispatch:
+
+jobs:
+  dry_run_deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Update Config
+        env:
+          REPO: ${{ github.repository }}
+          HASH: ${{ github.sha }}
+          BRANCH: ${{ github.ref.name }}
+          RUN_NUM: ${{ github.run.number }}
+          DBPASSWORD: ${{ secrets.RGCLONE_DBPASSWORD }}
+        run: |
+          # Clean up 
+          REPO_TAG=$(echo "$REPO" | tr -c -s '[:alnum:][:blank:]' '_')      # We can only use alphanumeric characters and underscores in tags
+          HASH_TAG="$(echo "${HASH}:0:8"                                    # The first 8 chars should be plenty
+          BRANCH_TAG=$(echo "$BRANCH" | tr -c -s '[:alnum:][:blank:]' '_')  # We can only use alphanumeric characters and underscores in tags
+          RUN_NUM_TAG=$RUN_NUM                                              # This should just be a number
+          
+          # Update the Widget.yml file with the correct tags
+          sed -i "s/\[REPO\]/$REPO_TAG/g;" .redgate/Widget.yml
+          sed -i "s/\[GITHASH\]/$HASH_TAG/g" .redgate/Widget.yml
+          sed -i "s/\[BRANCH\]/$BRANCH_TAG/g" .redgate/Widget.yml
+          sed -i "s/\[GITHUBRUNNUM\]/$RUN_NUM_TAG/g" .redgate/Widget.yml
+          sed -i "s/\[DBPASSWORD\]/$DBPASSWORD/g;" .redgate/Widget.yml
+
+      - name: Refresh Data Image
+        id: createDc
+        env:
+          RGCLONE_API_ENDPOINT: ${{ secrets.RGCLONE_API_ENDPOINT }}
+          RGCLONE_ACCESS_TOKEN: ${{ secrets.RGCLONE_ACCESS_TOKEN }}
+          RG_ACCOUNT: ${{ secrets.RG_ACCOUNT }}
+          REPO_OWNER: ${{ github.repository.owner }}
+          RUN_NUM: ${{ github.run.number }}
+        run: |
+          IMAGE_NAME="Widget-$REPO_OWNER"
+
+          echo "Downloading and unzipping rgclone..."
+          RGCLONE_DOWNLOAD_URL="${RGCLONE_API_ENDPOINT}cloning-api/download/cli/linux-amd64"
+          curl -sS "$RGCLONE_DOWNLOAD_URL" | tar xz
+
+          echo "Creating new Widget data image"
+          ~/redgate/rgclone create di -f .redgate/Widget.yml --name "${IMAGE_NAME}_New"
+          
+          echo "Renaming current Widget data image to 'Widget_Previous'"
+          ~/redgate/rgclone update di $IMAGE_NAME --name "${IMAGE_NAME}_Previous"
+          
+          echo "Renaming new Widget data image to 'Widget'"
+          ~/redgate/rgclone update di "${IMAGE_NAME}_New" --name $IMAGE_NAME
+
+          echo "Updating the lifetime of the old image to 2 hours"
+          ~/redgate/rgclone update di "${IMAGE_NAME}_Previous_${RUN_NUM}" --lifetime 2h
+
+          echo "Sharing the new image with designated user(s)"
+          ~/redgate/rgclone update di $IMAGE_NAME --user RG_ACCOUNT
+      
