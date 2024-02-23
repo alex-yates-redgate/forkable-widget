@@ -47,10 +47,8 @@ jobs:
           RGCLONE_DOWNLOAD_URL="${RGCLONE_API_ENDPOINT}cloning-api/download/cli/linux-amd64"
           curl -sS "$RGCLONE_DOWNLOAD_URL" | tar xz
 
-          echo "running: ls -l"
-          ls -l
-          echo "running: ls -l redgate"
-          ls -l redgate
+          echo "running: ls -R"
+          ls -R
 
           echo "Creating new Widget data image"
           ~/redgate/rgclone create di -f ".redgate/Widget.yml" --name "${IMAGE_NAME}_New"
