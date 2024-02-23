@@ -51,7 +51,7 @@ jobs:
           ls -R
 
           echo "Creating new Widget data image"
-          ~/redgate/rgclone create di -f tdm/Widget.yml --name "${IMAGE_NAME}_New"
+          ~/redgate/rgclone create di -f ./tdm/Widget.yml --name "${IMAGE_NAME}_New"
           
           echo "Renaming current Widget data image to 'Widget_Previous'"
           ~/redgate/rgclone update di $IMAGE_NAME --name "${IMAGE_NAME}_Previous"
