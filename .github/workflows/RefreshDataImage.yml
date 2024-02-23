@@ -15,8 +15,8 @@ jobs:
         env:
           REPO: ${{ github.repository }}
           HASH: ${{ github.sha }}
-          BRANCH: ${{ github.ref.name }}
-          RUN_NUM: ${{ github.run.number }}
+          BRANCH: ${{ github.ref_name }}
+          RUN_NUM: ${{ github.run_number }}
           DBPASSWORD: ${{ secrets.RGCLONE_DBPASSWORD }}
         run: |
           # Clean up 
