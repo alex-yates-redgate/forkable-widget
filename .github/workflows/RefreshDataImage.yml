@@ -37,7 +37,7 @@ jobs:
         env:
           RGCLONE_API_ENDPOINT: ${{ secrets.RGCLONE_API_ENDPOINT }}
           RGCLONE_ACCESS_TOKEN: ${{ secrets.RGCLONE_ACCESS_TOKEN }}
-          RG_ACCOUNT: ${{ secrets.RG_ACCOUNT }}
+          RG_ACCOUNT: ${{ secrets.REDGATE_ACCOUNT }}
           REPO_OWNER: ${{ github.repository.owner }}
           RUN_NUM: ${{ github.run.number }}
         run: |
