@@ -26,11 +26,11 @@ jobs:
           RUN_NUM_TAG=$RUN_NUM                                              # This should just be a number
           
           # Update the Widget.yml file with the correct tags
-          sed -i "s/\[REPO\]/$REPO_TAG/g;" .redgate/Widget.yml
-          sed -i "s/\[GITHASH\]/$HASH_TAG/g" .redgate/Widget.yml
-          sed -i "s/\[BRANCH\]/$BRANCH_TAG/g" .redgate/Widget.yml
-          sed -i "s/\[GITHUBRUNNUM\]/$RUN_NUM_TAG/g" .redgate/Widget.yml
-          sed -i "s/\[DBPASSWORD\]/$DBPASSWORD/g" .redgate/Widget.yml
+          sed -i "s/\[REPO\]/$REPO_TAG/g;" tdm/Widget.yml
+          sed -i "s/\[GITHASH\]/$HASH_TAG/g" tdm/Widget.yml
+          sed -i "s/\[BRANCH\]/$BRANCH_TAG/g" tdm/Widget.yml
+          sed -i "s/\[GITHUBRUNNUM\]/$RUN_NUM_TAG/g" tdm/Widget.yml
+          sed -i "s/\[DBPASSWORD\]/$DBPASSWORD/g" tdm/Widget.yml
 
       - name: Refresh Data Image
         id: createDc
@@ -47,11 +47,11 @@ jobs:
           RGCLONE_DOWNLOAD_URL="${RGCLONE_API_ENDPOINT}cloning-api/download/cli/linux-amd64"
           curl -sS "$RGCLONE_DOWNLOAD_URL" | tar xz
 
-          echo "running: ls -R -a"
-          ls -R -a
+          echo "running: ls -R"
+          ls -R
 
           echo "Creating new Widget data image"
-          ~/redgate/rgclone create di -f ".redgate/Widget.yml" --name "${IMAGE_NAME}_New"
+          ~/redgate/rgclone create di -f ./tdm/Widget.yml --name "${IMAGE_NAME}_New"
           
           echo "Renaming current Widget data image to 'Widget_Previous'"
           ~/redgate/rgclone update di $IMAGE_NAME --name "${IMAGE_NAME}_Previous"
