@@ -7,7 +7,6 @@ tags:
 - githash_[GITHASH]
 - branch_[BRANCH]
 - gitrun_[GITHUBRUNNUM]
-lifetime: 0
 backups:
   - path: mssql/Widget/WidgetProduction.bak
 preScript: |
