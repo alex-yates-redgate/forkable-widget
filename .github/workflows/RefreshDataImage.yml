@@ -39,7 +39,6 @@ jobs:
           RGCLONE_ACCESS_TOKEN: ${{ secrets.RGCLONE_ACCESS_TOKEN }}
           RG_ACCOUNT: ${{ secrets.REDGATE_ACCOUNT }}
           REPO_OWNER: ${{ github.repository_owner }}
-          RUN_NUM: ${{ github.run_number }}
         run: |
           IMAGE_NAME="Widget-$REPO_OWNER"
 
@@ -47,18 +46,18 @@ jobs:
           RGCLONE_DOWNLOAD_URL="${RGCLONE_API_ENDPOINT}cloning-api/download/cli/linux-amd64"
           curl -sS "$RGCLONE_DOWNLOAD_URL" | tar xz
 
-          echo "Creating new Widget data image"
+          echo "Creating ${IMAGE_NAME}_New data image"
           ./rgclone create di -f ./tdm/Widget.yml --name "${IMAGE_NAME}_New"
           
-          echo "Renaming current Widget data image to 'Widget_Previous'"
+          echo "Renaming $IMAGE_NAME data image to ${IMAGE_NAME}_Previous"
           ./rgclone update di $IMAGE_NAME --name "${IMAGE_NAME}_Previous"
           
-          echo "Renaming new Widget data image to 'Widget'"
+          echo "Renaming ${IMAGE_NAME}_New data image to $IMAGE_NAME"
           ./rgclone update di "${IMAGE_NAME}_New" --name $IMAGE_NAME
 
-          echo "Updating the lifetime of the old image to 2 hours"
-          ./rgclone update di "${IMAGE_NAME}_Previous_${RUN_NUM}" --lifetime 2h
+          echo "Updating ${IMAGE_NAME}_Previous lifetime to 2 hours"
+          ./rgclone update di "${IMAGE_NAME}_Previous" --lifetime 2h
 
-          echo "Sharing the new image with designated user(s)"
-          ./rgclone update di $IMAGE_NAME --user RG_ACCOUNT
+          echo "Sharing $IMAGE_NAME with designated user(s)"
+          ./rgclone update di $IMAGE_NAME --user $RG_ACCOUNT
       
