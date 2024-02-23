@@ -3,10 +3,10 @@ name: Widget
 engine: mssql
 version: 2022
 tags:
-- createdby_[GITUSER]
-- githash_[GITHASH]
 - repo_[REPO]
+- githash_[GITHASH]
 - branch_[BRANCH]
+- gitrun_[GITHUBRUNNUM]
 lifetime: 0
 backups:
   - path: mssql/Widget/WidgetProduction.bak
