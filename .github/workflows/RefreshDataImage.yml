@@ -30,7 +30,7 @@ jobs:
           sed -i "s/\[GITHASH\]/$HASH_TAG/g" .redgate/Widget.yml
           sed -i "s/\[BRANCH\]/$BRANCH_TAG/g" .redgate/Widget.yml
           sed -i "s/\[GITHUBRUNNUM\]/$RUN_NUM_TAG/g" .redgate/Widget.yml
-          sed -i "s/\[DBPASSWORD\]/$DBPASSWORD/g;" .redgate/Widget.yml
+          sed -i "s/\[DBPASSWORD\]/$DBPASSWORD/g" .redgate/Widget.yml
 
       - name: Refresh Data Image
         id: createDc
