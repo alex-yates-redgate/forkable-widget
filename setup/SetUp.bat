@@ -34,18 +34,18 @@ xcopy "%sourceDirectory%\*" "%targetDirectory%\" /s /e
 
 echo Files copied successfully.
 
-REM Replace [GITHUB_ACCOUNT] in files with the actual GitHub account
+REM Replace [GITHUB_ACCOUNT] and [BRANCH_NAME] in files with the actual GitHub account and branch
 for %%i in ("%targetDirectory%\*") do (
-    set "file=%%i"
-    setlocal enabledelayedexpansion
-    for /f "delims=" %%j in ('type "!file!"') do (
-        set "line=%%j"
-        set "line=!line:[GITHUB_ACCOUNT]=%GITHUB_ACCOUNT%!"
-        set "line=!line:[BRANCH_NAME]=%BRANCH_NAME%!"
-        echo !line!>> "!file!.tmp"
-    )
-    move /y "!file!.tmp" "!file!" >nul
-    endlocal
+   set "file=%%i"
+   setlocal enabledelayedexpansion
+   for /f "delims=" %%j in ('type "!file!"') do (
+       set "line=%%j"
+       set "line=!line:[GITHUB_ACCOUNT]=%GITHUB_ACCOUNT%!"
+       set "line=!line:[BRANCH_NAME]=%BRANCH_NAME%!"
+       echo !line!>> "!file!.tmp"
+   )
+   move /y "!file!.tmp" "!file!" >nul
+   endlocal
 )
 
 REM Create .gitignore file to ignore the entire directory

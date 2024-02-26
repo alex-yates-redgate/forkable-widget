@@ -13,6 +13,13 @@ for /f "tokens=1,* delims=:" %%A in ('rgclone get dc Widget-[GITHUB_ACCOUNT]_[BR
 set "dbJdbc=!jdbc_connection_string!databaseName=WidgetProduction"
 echo   JDBC is: %dbJdbc%
 
+pause
+
+echo Running: flyway migrate -url="%dbJdbc%" -locations="filesystem:../../migrations"
+flyway migrate -url="%dbJdbc%" -locations="filesystem:../../migrations"
+
+pause
+
 echo Open proxy to dc Widget-[GITHUB_ACCOUNT]_[BRANCH_NAME]
 rgclone proxy dc Widget-[GITHUB_ACCOUNT]_[BRANCH_NAME]
 
