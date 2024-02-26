@@ -16,7 +16,7 @@ jobs:
         env:
           RGCLONE_API_ENDPOINT: ${{ secrets.RGCLONE_API_ENDPOINT }}
           RGCLONE_ACCESS_TOKEN: ${{ secrets.RGCLONE_ACCESS_TOKEN }}
-          RG_ACCOUNT: ${{ secrets.REDGATE_ACCOUNT }}
+          #RG_ACCOUNT: ${{ secrets.REDGATE_ACCOUNT }}
           HASH: ${{ github.sha }}
         run: |
           echo "Downloading and unzipping rgclone..."
@@ -26,7 +26,7 @@ jobs:
           echo "Creating data container..."
           CONTAINER_NAME="widget-dry-run-${{ github.run_number }}-$(echo "${HASH:0:8}")"
           output=$(./rgclone create data-container --image Widget --name $CONTAINER_NAME --lifetime 5m --output yaml)
-          ./rgclone update dc $CONTAINER_NAME --user $RG_ACCOUNT
+          #./rgclone update dc $CONTAINER_NAME --user $RG_ACCOUNT
 
           # Outputting JDBC for flyway
           dcJdbc=$(echo "$output" | grep -o 'jdbcconnectionstring: .*' | cut -d ' ' -f 2-)
