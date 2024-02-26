@@ -42,6 +42,9 @@ jobs:
         run: |
           IMAGE_NAME="Widget-$REPO_OWNER"
 
+          echo "Deleting ${IMAGE_NAME}_New if exists"
+          ./rgclone delete di "${IMAGE_NAME}_New"  2>/dev/null || true # '2>/dev/null || true' redirects output to avoid broken builds if ${IMAGE_NAME} does not exist
+
           echo "Downloading and unzipping rgclone..."
           RGCLONE_DOWNLOAD_URL="${RGCLONE_API_ENDPOINT}cloning-api/download/cli/linux-amd64"
           curl -sS "$RGCLONE_DOWNLOAD_URL" | tar xz
