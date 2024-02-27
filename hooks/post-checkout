@@ -1,0 +1,14 @@
+#!/bin/sh
+# Run ReSpawnWithMigrate.bat after switching branches
+# The hook receives three arguments:
+# - $1: The previous HEAD reference
+# - $2: The new HEAD reference
+# - $3: A flag indicating whether the checkout was a branch checkout (1) or a file checkout (0)
+
+# Check if the checkout was a branch checkout
+if [ "$3" = "1" ]; then
+    # Change directory to the root of the repository
+    cd "$(git rev-parse --show-toplevel)"
+    # Run myfile.bat
+    ./tdm/ReSpawnWithMigrate.bat
+fi
