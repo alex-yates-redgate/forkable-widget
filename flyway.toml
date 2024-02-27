@@ -4,7 +4,8 @@ databaseType = "SqlServer"
 
 [environments.development]
 url = "jdbc:sqlserver://127.0.0.1:1433;user=Redgate;password=Redg@te1;trustServerCertificate=true;databaseName=WidgetProduction"
-schemas = [ ]
+user = "Redgate"
+password = "Redg@te1"
 displayName = "Development database"
 
 [environments.shadow]
@@ -21,7 +22,6 @@ validateMigrationNaming = true
 defaultSchema = "dbo"
 baselineOnMigrate = true
 baselineVersion = "001_20230703120714"
-
 
 [flywayDesktop]
 developmentEnvironment = "development"
