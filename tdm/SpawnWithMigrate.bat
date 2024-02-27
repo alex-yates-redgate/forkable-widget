@@ -19,15 +19,27 @@ echo Current branch: !CURRENT_BRANCH!
 echo Image name:     !IMAGE_NAME!
 echo Container name: !CONTAINER_NAME!
 
-rem Rather than using rgclone delete, we use rgclone update to set a lifetime of 1m, because it's faster.
-rem We also rename the old data-container to include a random number to avoid name clashes.
-echo If exists, deleting existing data-container !CONTAINER_NAME!
-set /a "rand=(%random% %% 10000) + 1"
-rgclone update data-container !CONTAINER_NAME! --lifetime 1m --name !CONTAINER_NAME!_old_!rand! >NUL 2>&1
+rem Searching for a container with the appropriate name
 
-rem ReSpawning the data-container
-echo Creating data-container !CONTAINER_NAME!
-rgclone create data-container --image !IMAGE_NAME! --name !CONTAINER_NAME! --lifetime 8h
+set "pattern=name: !CONTAINER_NAME!"
+set "found=false"
+
+for /f "tokens=* delims=" %%a in ('rgclone get dc -o yaml') do (
+    echo %%a | findstr /C:"%pattern%" > nul
+    if not errorlevel 1 (
+        set "found=true"
+        goto :break
+    )
+)
+
+:break
+
+if "%found%"=="true" (
+    echo Container !CONTAINER_NAME! already exists
+) else (
+    echo Container !CONTAINER_NAME! does not already exist. Creating now.
+    rgclone create data-container --image !IMAGE_NAME! --name !CONTAINER_NAME! --lifetime 8h
+)
 
 echo Capturing JDBC connection string
 for /f "tokens=1,* delims=:" %%A in ('rgclone get dc !CONTAINER_NAME! -o yaml 2^>NUL ^| findstr /c:"jdbcconnectionstring:"') do (

@@ -19,20 +19,27 @@ echo Current branch: !CURRENT_BRANCH!
 echo Image name:     !IMAGE_NAME!
 echo Container name: !CONTAINER_NAME!
 
-echo Capturing JDBC connection string
-for /f "tokens=1,* delims=:" %%A in ('rgclone get dc !CONTAINER_NAME! -o yaml 2^>NUL ^| findstr /c:"jdbcconnectionstring:"') do (
-    set "jdbc_connection_string=%%B"
+rem Searching for a container with the appropriate name
+
+set "pattern=name: !CONTAINER_NAME!"
+set "found=false"
+
+for /f "tokens=* delims=" %%a in ('rgclone get dc -o yaml') do (
+    echo %%a | findstr /C:"%pattern%" > nul
+    if not errorlevel 1 (
+        set "found=true"
+        goto :break
+    )
 )
-set "dbJdbc=!jdbc_connection_string!databaseName=WidgetProduction"
-rem Remove leading and trailing spaces
-set "dbJdbc=%dbJdbc: =%"
-echo   JDBC is: %dbJdbc%
 
-for /f "tokens=* delims=" %%a in ('git rev-parse --show-toplevel') do set "repo_path=%%a"
-echo Repository Root: %repo_path%
+:break
 
-echo Running: flyway migrate -url="%dbJdbc%" -locations="filesystem:%repo_path%/migrations"
-flyway migrate -url="%dbJdbc%" -locations="filesystem:%repo_path%/migrations"
+if "%found%"=="true" (
+    echo Container !CONTAINER_NAME! already exists
+) else (
+    echo Container !CONTAINER_NAME! does not already exist. Creating now.
+    rgclone create data-container --image !IMAGE_NAME! --name !CONTAINER_NAME! --lifetime 8h
+)
 
 echo Open proxy to data-container !CONTAINER_NAME!
 rgclone proxy data-container !CONTAINER_NAME!
