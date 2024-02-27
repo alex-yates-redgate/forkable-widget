@@ -13,7 +13,7 @@ preScript: |
   CREATE DATABASE [Widget_Shadow]
 postScript: |
   create login [Redgate]
-  with password = N'[[DBPASSWORD]]'
+  with password = N'[DBPASSWORD]'
     , default_database = [master]
     , default_language = [us_english]
     , check_expiration = off
