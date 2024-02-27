@@ -3,20 +3,15 @@ name = "FlywayTrialProject"
 databaseType = "SqlServer"
 
 [environments.development]
-url = "jdbc:sqlserver://localhost;databaseName=WidgetDev;encrypt=true;integratedSecurity=true;trustServerCertificate=true"
+url = "jdbc:sqlserver://127.0.0.1:1433;user=Redg@te1;password=Redg@te1;trustServerCertificate=true;databaseName=WidgetProduction"
 schemas = [ ]
 displayName = "Development database"
 
 [environments.shadow]
-url = "jdbc:sqlserver://localhost;databaseName=WidgetZShadow;encrypt=true;integratedSecurity=true;trustServerCertificate=true"
+url = "jdbc:sqlserver://127.0.0.1:1433;user=Redg@te1;password=Redg@te1;trustServerCertificate=true;databaseName=Widget_Shadow"
 schemas = [ ]
 displayName = "Shadow database"
 provisioner = "clean"
-
-[environments.production]
-url = "jdbc:sqlserver://localhost;databaseName=WidgetProd;encrypt=true;integratedSecurity=true;trustServerCertificate=true"
-schemas = [ ]
-displayName = "Production"
 
 [flyway]
 locations = [ "filesystem:migrations" ]

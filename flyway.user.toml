@@ -1,6 +1,4 @@
 [flywayDesktop]
 
-flyway.url=jdbc:sqlserver://127.0.0.1:1433;user=Redg@te1;password=Redg@te1;trustServerCertificate=true;databaseName=WidgetProduction
-
 [redgateCompare]
 filterFile = "filter.rgf"
