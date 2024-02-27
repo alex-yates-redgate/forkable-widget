@@ -10,6 +10,5 @@ if [ "$3" = "1" ]; then
     # Change directory to the root of the repository
     cd "$(git rev-parse --show-toplevel)"
     # Run myfile.bat
-    ./tdm/SpawnWithoutMigrate.bat
-    ./tdm/OpenProxy.bat
+    ./tdm/SpawnWithoutMigrateNoProxy.bat
 fi
