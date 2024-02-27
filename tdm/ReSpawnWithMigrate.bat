@@ -38,8 +38,11 @@ rem Remove leading and trailing spaces
 set "dbJdbc=%dbJdbc: =%"
 echo   JDBC is: %dbJdbc%
 
+for /f "tokens=* delims=" %%a in ('git rev-parse --show-toplevel') do set "repo_path=%%a"
+echo Repository Root: %repo_path%
+
 echo Running: flyway migrate -url="%dbJdbc%" -locations="filesystem:../migrations"
-flyway migrate -url="%dbJdbc%" -locations="filesystem:../migrations"
+flyway migrate -url="%dbJdbc%" -locations="filesystem:%repo_path%/migrations"
 
 echo Open proxy to data-container !CONTAINER_NAME!
 rgclone proxy data-container !CONTAINER_NAME!
