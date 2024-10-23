@@ -35,7 +35,7 @@ jobs:
       
       - name: Flyway Migrate
         env:
-          FLYWAY_VERSION: "10.8.1"
+          FLYWAY_VERSION: "10.20.0"
         run: |
           echo "Downloading and unzipping Flyway ${FLYWAY_VERSION}..."
           curl -sS https://download.red-gate.com/maven/release/com/redgate/flyway/flyway-commandline/${FLYWAY_VERSION}/flyway-commandline-${FLYWAY_VERSION}-linux-x64.tar.gz | tar xz >/dev/null
